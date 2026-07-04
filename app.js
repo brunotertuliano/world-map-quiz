@@ -357,7 +357,7 @@
       // Bandeira grande preenchida logo abaixo
       const img = document.createElement("img");
       img.className = "opt-flag";
-      img.src = flagUrl(p.iso2);
+      img.src = flagUrl(p.iso2, "w640");
       img.alt = "";
       img.loading = "lazy";
       img.onerror = () => {

@@ -340,7 +340,6 @@ body {
   flex-direction: column;
   align-items: stretch;
   gap: 10px;
-  aspect-ratio: 1 / 1;
   background: var(--card-2);
   border: 2px solid transparent;
   border-radius: 14px;
@@ -358,18 +357,16 @@ body {
   line-height: 1.2;
 }
 .opt-flag {
-  flex: 1;
-  min-height: 0;
   width: 100%;
+  aspect-ratio: 580 / 406; /* proporção padrão da maioria das bandeiras */
   object-fit: cover;
   border-radius: 8px;
   background: #0c1424;
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 .flag-fallback {
-  flex: 1;
-  min-height: 0;
   width: 100%;
+  aspect-ratio: 580 / 406;
   display: flex;
   align-items: center;
   justify-content: center;
