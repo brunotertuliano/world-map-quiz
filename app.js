@@ -14,6 +14,20 @@
   const DIFF_KEY = "geotreino_dificuldade";
   const HARD_POOL = 8; // no nível difícil, sorteia os distratores entre os N países mais próximos
 
+  // ---------- Ícones (SVG inline, sem dependência externa) ----------
+  const ICONS = {
+    heartOn:
+      '<svg class="ic heart heart-on" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/></svg>',
+    heartOff:
+      '<svg class="ic heart heart-off" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143q.09.083.176.171a3 3 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15"/></svg>',
+    trophy:
+      '<svg class="ic ic-trophy" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M2.5.5A.5.5 0 0 1 3 0h10a.5.5 0 0 1 .5.5q0 .807-.034 1.536a3 3 0 1 1-1.133 5.89c-.79 1.865-1.878 2.777-2.833 3.011v2.173l1.425.356c.194.048.377.135.537.255L13.3 15.1a.5.5 0 0 1-.3.9H3a.5.5 0 0 1-.3-.9l1.838-1.379c.16-.12.343-.207.537-.255L6.5 13.11v-2.173c-.955-.234-2.043-1.146-2.833-3.012a3 3 0 1 1-1.133-5.89A33 33 0 0 1 2.5.5m.099 2.54a2 2 0 0 0 .72 3.935c-.333-1.05-.588-2.346-.72-3.935m10.083 3.935a2 2 0 0 0 .72-3.935c-.133 1.59-.388 2.885-.72 3.935"/></svg>',
+    globe:
+      '<svg class="ic ic-globe-hover" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    flag:
+      '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>',
+  };
+
   // ---------- Textos (i18n) ----------
   const STRINGS = {
     pt: {
@@ -26,8 +40,8 @@
       quizSub: "Escolha a bandeira e o nome corretos",
       endPoints: "pontos", endSolved: "países acertados", endBest: "maior sequência",
       playAgain: "Jogar de novo",
-      hoverMystery: "🌍 país misterioso", hoverNon: "território não jogável",
-      winTitle: "🏆 Você mapeou o mundo!",
+      hoverMystery: "país misterioso", hoverNon: "território não jogável",
+      winTitle: "Você mapeou o mundo!",
       winMsg: "Incrível! Você acertou todos os países.",
       loseTitle: "Fim de jogo",
       loseMsg: "Suas vidas acabaram. Bora treinar de novo?",
@@ -53,8 +67,8 @@
       quizSub: "Pick the correct flag and name",
       endPoints: "points", endSolved: "countries solved", endBest: "best streak",
       playAgain: "Play again",
-      hoverMystery: "🌍 mystery country", hoverNon: "non-playable territory",
-      winTitle: "🏆 You mapped the world!",
+      hoverMystery: "mystery country", hoverNon: "non-playable territory",
+      winTitle: "You mapped the world!",
       winMsg: "Amazing! You guessed every country.",
       loseTitle: "Game over",
       loseMsg: "You're out of lives. Ready for another round?",
@@ -92,6 +106,9 @@
   // ---------- Estado do jogo ----------
   let state;
   let lastResult = null; // "win" | "lose" | null (para re-render ao trocar idioma)
+  // Opções já sorteadas por país: fixa o quiz de cada país durante a partida
+  // (reclicar mostra sempre as mesmas opções — sem padrão explorável). Limpo ao reiniciar.
+  let quizPorChave = {};
   function novoEstado() {
     return {
       score: 0,
@@ -232,7 +249,7 @@
   function mostrarHover(f) {
     const p = paisDe(f.id);
     // Não revela o nome do país-alvo antes de responder — mostra só "?"
-    el.hoverName.textContent = p ? t().hoverMystery : t().hoverNon;
+    el.hoverName.innerHTML = p ? ICONS.globe + " " + t().hoverMystery : t().hoverNon;
     el.hoverName.classList.add("show");
   }
   function esconderHover() {
@@ -315,8 +332,13 @@
     state.answering = true;
     esconderHover();
 
-    const distratores = escolherDistratores(chaveCorreta, 3);
-    const opcoes = embaralhar([chaveCorreta, ...distratores]);
+    // Sorteia uma vez por país e reaproveita — o quiz fica fixo na partida.
+    let opcoes = quizPorChave[chaveCorreta];
+    if (!opcoes) {
+      const distratores = escolherDistratores(chaveCorreta, 3);
+      opcoes = embaralhar([chaveCorreta, ...distratores]);
+      quizPorChave[chaveCorreta] = opcoes;
+    }
 
     el.options.innerHTML = "";
     el.options.classList.remove("answered");
@@ -327,21 +349,25 @@
       btn.className = "option";
       btn.dataset.key = chave;
 
+      // Nome no topo central
+      const nome = document.createElement("span");
+      nome.className = "opt-name";
+      nome.textContent = nomeDe(p);
+
+      // Bandeira grande preenchida logo abaixo
       const img = document.createElement("img");
+      img.className = "opt-flag";
       img.src = flagUrl(p.iso2);
-      img.alt = nomeDe(p);
+      img.alt = "";
       img.loading = "lazy";
       img.onerror = () => {
-        const fb = document.createElement("span");
+        const fb = document.createElement("div");
         fb.className = "flag-fallback";
-        fb.textContent = "🏳️";
+        fb.innerHTML = ICONS.flag;
         img.replaceWith(fb);
       };
 
-      const nome = document.createElement("span");
-      nome.textContent = nomeDe(p);
-
-      btn.append(img, nome);
+      btn.append(nome, img);
       btn.addEventListener("click", () => responder(chave, chaveCorreta));
       el.options.appendChild(btn);
     }
@@ -406,9 +432,13 @@
   // ---------- HUD ----------
   function atualizarHUD() {
     el.score.textContent = state.score;
-    el.streak.textContent = state.streak + " 🔥";
+    el.streak.textContent = state.streak;
     el.solved.textContent = state.solved.size + " / " + state.totalJogaveis;
-    el.lives.textContent = state.lives > 0 ? "❤️".repeat(state.lives) : "💀";
+    let coracoes = "";
+    for (let i = 0; i < START_LIVES; i++) {
+      coracoes += i < state.lives ? ICONS.heartOn : ICONS.heartOff;
+    }
+    el.lives.innerHTML = coracoes;
   }
 
   // ---------- Fim de jogo ----------
@@ -420,7 +450,7 @@
   function renderFim() {
     if (!lastResult) return;
     const venceu = lastResult === "win";
-    el.endTitle.textContent = venceu ? t().winTitle : t().loseTitle;
+    el.endTitle.innerHTML = venceu ? ICONS.trophy + " " + t().winTitle : t().loseTitle;
     el.endMsg.textContent = venceu ? t().winMsg : t().loseMsg;
     el.endScore.textContent = state.score;
     el.endSolved.textContent = state.solved.size;
@@ -484,6 +514,7 @@
     state = novoEstado();
     state.totalJogaveis = chavesJogaveis.length;
     lastResult = null;
+    quizPorChave = {};
     if (paths) {
       paths
         .classed("correct", false)

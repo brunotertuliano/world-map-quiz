@@ -8,7 +8,7 @@
 </head>
 <body>
   <header id="topbar">
-    <div class="brand">🌍 GeoTreino</div>
+    <div class="brand"><span class="brand-icon"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>GeoTreino</div>
     <div class="stats">
       <div class="stat" title="Pontuação">
         <span class="stat-label" data-i18n="score">Pontos</span>
@@ -16,7 +16,7 @@
       </div>
       <div class="stat" title="Sequência de acertos">
         <span class="stat-label" data-i18n="streak">Sequência</span>
-        <span class="stat-value" id="streak">0 🔥</span>
+        <span class="stat-value"><span id="streak">0</span><span class="stat-icon fire"><svg class="ic" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 16c3.314 0 6-2 6-5.5 0-1.5-.5-4-2.5-6 .25 1.5-1.25 2-1.25 2C11 4 9 .5 6 0c.357 2 .5 4-2 6-1.25 1-2 2.729-2 4.5C2 14 4.686 16 8 16m0-1c-1.657 0-3-1-3-2.75 0-.75.25-2 1.25-3C6.125 10 7 10.5 7 10.5c-.375-1.25.5-3.25 2-3.5-.179 1-.25 2 1 3 .625.5 1 1.364 1 2.25C11 14 9.657 15 8 15"/></svg></span></span>
       </div>
       <div class="stat" title="Acertos">
         <span class="stat-label" data-i18n="solved">Acertos</span>
@@ -24,7 +24,7 @@
       </div>
       <div class="stat" title="Vidas">
         <span class="stat-label" data-i18n="lives">Vidas</span>
-        <span class="stat-value" id="lives">❤️❤️❤️</span>
+        <span class="stat-value" id="lives"></span>
       </div>
       <span id="game-mode" class="game-mode" title="Idioma · Nível"></span>
       <button id="restart-btn" class="btn ghost" data-i18n="restart" title="Reiniciar jogo">Reiniciar</button>
@@ -40,15 +40,15 @@
   <!-- Tela inicial: define idioma e dificuldade da partida -->
   <div id="setup-overlay" class="overlay hidden">
     <div class="setup-card">
-      <div class="lang-globe">🌍</div>
+      <div class="lang-globe"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
       <h1 class="lang-title">GeoTreino</h1>
       <p id="setup-sub" class="lang-sub">Escolha o idioma · Choose your language</p>
 
       <div class="setup-group">
         <span id="setup-lang-label" class="setup-label">Idioma · Language</span>
         <div id="setup-lang" class="seg setup-seg">
-          <button class="seg-btn" data-lang="pt">🇧🇷 Português</button>
-          <button class="seg-btn" data-lang="en">🇺🇸 English</button>
+          <button class="seg-btn" data-lang="pt"><img class="lang-flag-img" src="https://flagcdn.com/w40/br.png" alt="" />Português</button>
+          <button class="seg-btn" data-lang="en"><img class="lang-flag-img" src="https://flagcdn.com/w40/us.png" alt="" />English</button>
         </div>
       </div>
 
@@ -68,7 +68,7 @@
   <!-- Popup de quiz -->
   <div id="quiz-overlay" class="overlay hidden">
     <div class="quiz-card">
-      <button id="quiz-close" class="close-btn" title="Fechar" aria-label="Fechar">✕</button>
+      <button id="quiz-close" class="close-btn" title="Fechar" aria-label="Fechar"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" aria-hidden="true"><line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/></svg></button>
       <h2 class="quiz-title" data-i18n="quizTitle">Que país é este?</h2>
       <p class="quiz-sub" data-i18n="quizSub">Escolha a bandeira e o nome corretos</p>
       <div id="options" class="options"></div>
