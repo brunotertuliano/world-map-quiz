@@ -1,4 +1,4 @@
-/* GeoTreino — jogo de silhuetas de países para treinar GeoGuessr.
+/* GeoTraining — jogo de silhuetas de países para treinar GeoGuessr.
    Depende de: d3 (v7), topojson-client (v3), WORLD_TOPO (data/world.js),
    PAISES (data/paises.js). */
 
@@ -32,7 +32,7 @@
   const STRINGS = {
     pt: {
       htmlLang: "pt-BR",
-      title: "GeoTreino — Treino de países para GeoGuessr",
+      title: "GeoTraining — Treino de países para GeoGuessr",
       score: "Pontos", streak: "Sequência", solved: "Acertos", lives: "Vidas",
       restart: "Reiniciar",
       hint: "Clique em um país para adivinhar • use a roda do mouse para dar zoom",
@@ -59,7 +59,7 @@
     },
     en: {
       htmlLang: "en",
-      title: "GeoTreino — Country training for GeoGuessr",
+      title: "GeoTraining — Country training for GeoGuessr",
       score: "Score", streak: "Streak", solved: "Solved", lives: "Lives",
       restart: "Restart",
       hint: "Click a country to guess • use the mouse wheel to zoom",
