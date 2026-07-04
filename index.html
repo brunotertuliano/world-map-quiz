@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title data-i18n="title">GeoTreino — Treino de países para GeoGuessr</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header id="topbar">
+    <div class="brand">🌍 GeoTreino</div>
+    <div class="stats">
+      <div class="stat" title="Pontuação">
+        <span class="stat-label" data-i18n="score">Pontos</span>
+        <span class="stat-value" id="score">0</span>
+      </div>
+      <div class="stat" title="Sequência de acertos">
+        <span class="stat-label" data-i18n="streak">Sequência</span>
+        <span class="stat-value" id="streak">0 🔥</span>
+      </div>
+      <div class="stat" title="Acertos">
+        <span class="stat-label" data-i18n="solved">Acertos</span>
+        <span class="stat-value" id="solved">0 / 0</span>
+      </div>
+      <div class="stat" title="Vidas">
+        <span class="stat-label" data-i18n="lives">Vidas</span>
+        <span class="stat-value" id="lives">❤️❤️❤️</span>
+      </div>
+      <span id="game-mode" class="game-mode" title="Idioma · Nível"></span>
+      <button id="restart-btn" class="btn ghost" data-i18n="restart" title="Reiniciar jogo">Reiniciar</button>
+    </div>
+  </header>
+
+  <main id="map-wrap">
+    <svg id="map"></svg>
+    <div id="hint" data-i18n="hint">Clique em um país para adivinhar • use a roda do mouse para dar zoom</div>
+    <div id="hover-name"></div>
+  </main>
+
+  <!-- Tela inicial: define idioma e dificuldade da partida -->
+  <div id="setup-overlay" class="overlay hidden">
+    <div class="setup-card">
+      <div class="lang-globe">🌍</div>
+      <h1 class="lang-title">GeoTreino</h1>
+      <p id="setup-sub" class="lang-sub">Escolha o idioma · Choose your language</p>
+
+      <div class="setup-group">
+        <span id="setup-lang-label" class="setup-label">Idioma · Language</span>
+        <div id="setup-lang" class="seg setup-seg">
+          <button class="seg-btn" data-lang="pt">🇧🇷 Português</button>
+          <button class="seg-btn" data-lang="en">🇺🇸 English</button>
+        </div>
+      </div>
+
+      <div class="setup-group">
+        <span id="setup-diff-label" class="setup-label">Dificuldade</span>
+        <div id="setup-diff" class="seg setup-seg">
+          <button class="seg-btn" data-diff="facil">Fácil</button>
+          <button class="seg-btn" data-diff="medio">Médio</button>
+          <button class="seg-btn" data-diff="dificil">Difícil</button>
+        </div>
+      </div>
+
+      <button id="start-btn" class="btn primary">Começar</button>
+    </div>
+  </div>
+
+  <!-- Popup de quiz -->
+  <div id="quiz-overlay" class="overlay hidden">
+    <div class="quiz-card">
+      <button id="quiz-close" class="close-btn" title="Fechar" aria-label="Fechar">✕</button>
+      <h2 class="quiz-title" data-i18n="quizTitle">Que país é este?</h2>
+      <p class="quiz-sub" data-i18n="quizSub">Escolha a bandeira e o nome corretos</p>
+      <div id="options" class="options"></div>
+    </div>
+  </div>
+
+  <!-- Overlay de fim de jogo -->
+  <div id="end-overlay" class="overlay hidden">
+    <div class="end-card">
+      <h1 id="end-title">Fim de jogo</h1>
+      <p id="end-msg"></p>
+      <div class="end-stats">
+        <div><span id="end-score">0</span><small data-i18n="endPoints">pontos</small></div>
+        <div><span id="end-solved">0</span><small data-i18n="endSolved">países acertados</small></div>
+        <div><span id="end-best">0</span><small data-i18n="endBest">maior sequência</small></div>
+      </div>
+      <button id="play-again" class="btn primary" data-i18n="playAgain">Jogar de novo</button>
+    </div>
+  </div>
+
+  <!-- Bibliotecas (CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+  <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+  <!-- Dados locais (sem fetch, funciona abrindo o arquivo direto) -->
+  <script src="data/world.js"></script>
+  <script src="data/paises.js"></script>
+  <!-- Lógica do jogo -->
+  <script src="app.js"></script>
+</body>
+</html>

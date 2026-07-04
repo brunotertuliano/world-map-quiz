@@ -1,0 +1,18 @@
+# Configurações locais do Claude Code
+.claude/
+
+# Ferramentas de teste / automação
+.playwright-mcp/
+
+# Dependências (não usadas em produção; o jogo é estático)
+node_modules/
+
+# Lixo de sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editores
+.vscode/
+.idea/
+*.log
